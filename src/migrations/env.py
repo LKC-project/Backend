@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-import src.models.module
+import src.models.users  # noqa
 
 from src.database import Base
 from src.config import settings

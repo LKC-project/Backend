@@ -1,5 +1,6 @@
 ### dotenv template
 .env
+.env-dev
 
 ### VirtualEnv template
 # Virtualenv

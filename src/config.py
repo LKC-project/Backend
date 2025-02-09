@@ -2,7 +2,6 @@ from os import getenv
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
 dev = str(getenv("DEV")).lower() == "true"
 
 
@@ -12,6 +11,9 @@ class Settings(BaseSettings):
     DB_USER: str
     DB_PASS: str
     DB_NAME: str
+
+    JWT_SECRET: str
+    JWT_ALGORITHM: str
 
     model_config = SettingsConfigDict(env_file=".env" if not dev else ".env-dev")
 
