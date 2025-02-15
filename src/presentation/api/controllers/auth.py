@@ -1,11 +1,9 @@
-from typing import Annotated
+from fastapi import APIRouter, Depends, Response, status
 
-from fastapi import APIRouter, Depends, Response
-from didiator import Mediator
+from src.application.auth.commands.register_user import RegisterUser
+from src.application.auth.queries.login_user import LoginUser
 
-from src.application.user.commands.create_user import UserCreate
-from src.presentation.api.providers.stub import Stub
-from src.application.auth.commands.login_user import UserLogin
+from src.presentation.api.providers.dependency import MediatorDep
 
 
 auth_router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -13,13 +11,16 @@ auth_router = APIRouter(prefix="/auth", tags=["Auth"])
 routers = (auth_router, )
 
 
-@auth_router.post("/login")
+@auth_router.post(
+    "/login",
+    status_code=status.HTTP_204_NO_CONTENT
+)
 async def login(
-        mediator: Annotated[Mediator, Depends(Stub(Mediator))],
-        data: UserLogin
+        mediator: MediatorDep,
+        data: LoginUser
 ):
-    token = await mediator.send(data)
-    response = Response()
+    token = await mediator.query(data)
+    response = Response(status_code=status.HTTP_204_NO_CONTENT)
 
     response.set_cookie(
         "access_token",
@@ -30,15 +31,21 @@ async def login(
     return response
 
 
-@auth_router.post("/register")
+@auth_router.post(
+    "/register",
+    status_code=status.HTTP_201_CREATED
+)
 async def register(
-        mediator: Annotated[Mediator, Depends(Stub(Mediator))],
-        data: UserCreate
+        mediator: MediatorDep,
+        data: RegisterUser
 ):
-    return await mediator.send(data)
+    await mediator.send(data)
 
 
-@auth_router.post("/logout")
+@auth_router.post(
+    "/logout",
+    status_code=status.HTTP_204_NO_CONTENT
+)
 async def logout():
     response = Response()
 

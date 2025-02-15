@@ -17,6 +17,8 @@ from src.infrastructure.db.uow import build_uow
 from src.application.common.interfaces.uow import UnitOfWork
 from src.application.user.interfaces import UserReader, UserRepo
 from src.infrastructure.db.repositories.user import UserReaderImpl, UserRepoImpl
+from src.application.auth.interfaces import AuthReader, AuthRepo
+from src.infrastructure.db.repositories.auth import AuthReaderImpl, AuthRepoImpl
 
 
 def init_di_builder() -> DiBuilder:
@@ -61,3 +63,6 @@ def setup_db_factories(di_builder: DiBuilder):
 
     di_builder.bind(bind_by_type(Dependent(UserReaderImpl, scope=DiScope.REQUEST), UserReader, covariant=True))
     di_builder.bind(bind_by_type(Dependent(UserRepoImpl, scope=DiScope.REQUEST), UserRepo, covariant=True))
+
+    di_builder.bind(bind_by_type(Dependent(AuthReaderImpl, scope=DiScope.REQUEST), AuthReader, covariant=True))
+    di_builder.bind(bind_by_type(Dependent(AuthRepoImpl, scope=DiScope.REQUEST), AuthRepo, covariant=True))

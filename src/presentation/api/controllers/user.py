@@ -1,10 +1,8 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Path
-from didiator import Mediator
+from fastapi import APIRouter, Path
 
-from src.presentation.api.providers.stub import Stub
-from src.application.user.commands.create_user import UserCreate
+from src.presentation.api.providers.dependency import MediatorDep
 
 
 user_router = APIRouter(prefix="/user", tags=["Users"])
@@ -21,15 +19,14 @@ async def get_me(
 
 
 @user_router.get("/{name}")
-async def get_user(
+async def get_user_by_name(
         name: Annotated[str, Path(max_length=48)]
 ):
     ...
 
 
-@user_router.post("")
-async def post_user(
-        mediator: Annotated[Mediator, Depends(Stub(Mediator))],
-        data: UserCreate
+@user_router.get("/{id}")
+async def get_user_by_id(
+        id: Annotated[int, Path()]
 ):
-    return await mediator.send(data)
+    ...

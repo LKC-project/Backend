@@ -7,6 +7,7 @@ from src.infrastructure.mediator import init_mediator, setup_mediator
 
 from src.presentation.api.controllers import setup_routers
 from src.presentation.api.providers import setup_providers
+from src.presentation.api.middlewares import setup_middlewares
 
 
 @asynccontextmanager
@@ -26,5 +27,7 @@ async def init_app(app: FastAPI):
 
 def init_api() -> FastAPI:
     app = FastAPI(lifespan=init_app)
+
+    setup_middlewares(app)
 
     return app
