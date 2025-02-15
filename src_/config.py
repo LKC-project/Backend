@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 dev = str(getenv("DEV")).lower() == "true"
 
 
-class Config(BaseSettings):
+class Settings(BaseSettings):
     DB_HOST: str
     DB_PORT: str
     DB_USER: str
@@ -23,4 +23,4 @@ class Config(BaseSettings):
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
 
-config = Config()
+settings = Settings()
