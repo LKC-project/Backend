@@ -4,9 +4,10 @@ from typing import Any
 from fastapi import Request
 from fastapi.security.api_key import APIKeyCookie
 
-from src_.services.auth.transport import Transport
-from src_.services.auth.strategy import Strategy
-from src_.services.auth.exceptions import NotAuthenticatedException
+from src.application.common.exceptions.auth import Unauthorized
+
+from src.presentation.api.providers.auth.transport import Transport
+from src.presentation.api.providers.auth.strategy import Strategy
 
 
 class BaseSecuritySchema(APIKeyCookie, metaclass=ABCMeta):
@@ -26,7 +27,7 @@ class BaseSecuritySchema(APIKeyCookie, metaclass=ABCMeta):
 
     @abstractmethod
     async def __call__(self, request: Request) -> Any:
-        ...
+        pass
 
 
 class CurrentUserID(BaseSecuritySchema):
@@ -35,14 +36,9 @@ class CurrentUserID(BaseSecuritySchema):
 
         if token is None:
             if self.auto_error:
-                raise NotAuthenticatedException
+                raise Unauthorized
             return None
 
         data = self.strategy.decode(token)
 
         return data["id"]
-
-
-class CurrentUser(BaseSecuritySchema):
-    async def __call__(self, request: Request) -> str | None:
-        raise NotImplemented

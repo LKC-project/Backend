@@ -3,8 +3,9 @@ from abc import ABCMeta, abstractmethod
 from jwt import encode, decode
 from jwt.exceptions import InvalidSignatureError
 
-from src_.services.auth.etc import AuthData
-from src_.services.auth.exceptions import NotAuthenticatedException
+from src.application.common.exceptions.auth import Unauthorized
+
+from src.presentation.api.providers.auth.etc import AuthData
 
 
 class Strategy(metaclass=ABCMeta):
@@ -37,4 +38,4 @@ class JWTStrategy(Strategy):
                 algorithms=[self.algorithm]
             )
         except InvalidSignatureError:
-            raise NotAuthenticatedException
+            raise Unauthorized

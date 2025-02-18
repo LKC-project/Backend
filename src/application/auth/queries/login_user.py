@@ -5,18 +5,17 @@ from src.application.auth.interfaces import AuthReader
 from src.application.common.exceptions.auth import WrongLoginOrPassword
 
 from src.application.auth.password import Password
-from src.application.auth.token import Token
 
 
-class LoginUser(LoginUserDTO, Query[str]):
+class LoginUser(LoginUserDTO, Query[int]):
     pass
 
 
-class LoginUserHandler(QueryHandler[LoginUser, str]):
+class LoginUserHandler(QueryHandler[LoginUser, int]):
     def __init__(self, reader: AuthReader):
         self.reader = reader
 
-    async def __call__(self, command: LoginUser) -> str:
+    async def __call__(self, command: LoginUser) -> int:
         user = await self.reader.select_by_name(command.name)
 
         if user is None:
@@ -25,6 +24,4 @@ class LoginUserHandler(QueryHandler[LoginUser, str]):
         if not Password.valid(command.password, user.hashed_password):
             raise WrongLoginOrPassword
 
-        token = Token.encode({"id": user.id})
-
-        return token
+        return user.id

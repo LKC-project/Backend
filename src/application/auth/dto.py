@@ -9,6 +9,10 @@ class UserDTO(DTO):
     hashed_password: bytes = Field(max_length=60)
 
 
+class SelectUserByIDDTO(DTO):
+    id: int
+
+
 class InsertUserDTO(DTO):
     name: str = Field(max_length=48)
     hashed_password: bytes = Field(max_length=60)

@@ -1,10 +1,12 @@
 from sqlalchemy import insert, select
+from sqlalchemy.exc import IntegrityError
 
 from src.infrastructure.db.repositories.base import BaseRepo
 from src.infrastructure.db.models.user import UserORM
 from src.infrastructure.db.mappers import AuthMapper
 from src.application.auth.interfaces import AuthReader, AuthRepo
 from src.application.auth.dto import UserDTO, InsertUserDTO
+from src.application.common.exceptions.auth import UsernameAlreadyInUse
 
 
 class AuthReaderImpl(BaseRepo[UserORM], AuthReader):
@@ -31,6 +33,12 @@ class AuthRepoImpl(BaseRepo[UserORM], AuthRepo):
     model = UserORM
     mapper = AuthMapper
 
+    @staticmethod
+    def _parse_error(err: IntegrityError):
+        match getattr(err.orig.__cause__, "constraint_name"):
+            case "User_name_key":
+                raise UsernameAlreadyInUse
+
     async def insert_one(self, user: InsertUserDTO) -> UserDTO:
         stmt = (
             insert(self.model)
@@ -38,6 +46,11 @@ class AuthRepoImpl(BaseRepo[UserORM], AuthRepo):
             .returning(self.model)
         )
 
-        result = await self.session.scalar(stmt)
+        result = None
+
+        try:
+            result = await self.session.scalar(stmt)
+        except IntegrityError as err:
+            self._parse_error(err)
 
         return self.mapper.from_orm(result)

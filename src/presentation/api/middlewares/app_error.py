@@ -3,6 +3,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from src.domain.common.exceptions.base import BaseAppError
 
+from src.presentation.api.exceptions import ExceptionResponse
+
 
 class AppErrorHandlerMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
@@ -11,7 +13,7 @@ class AppErrorHandlerMiddleware(BaseHTTPMiddleware):
             return response
         except BaseAppError as exception:
             return JSONResponse(
-                content={"detail": exception.detail},
+                content=ExceptionResponse(detail=exception.detail).model_dump(),
                 status_code=exception.code,
             )
 
