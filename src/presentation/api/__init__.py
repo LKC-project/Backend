@@ -26,7 +26,10 @@ async def init_app(app: FastAPI):
 
 
 def init_api() -> FastAPI:
-    app = FastAPI(lifespan=init_app)
+    app = FastAPI(
+        title="LKC API",
+        lifespan=init_app
+    )
 
     setup_middlewares(app)
 
