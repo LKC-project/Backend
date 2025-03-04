@@ -13,6 +13,11 @@ class Config(BaseSettings):
     DB_PASS: str
     DB_NAME: str
 
+    AWS_S3_ACCESS_KEY: str
+    AWS_S3_SECRET_KEY: str
+    AWS_S3_ENDPOINT_URL: str
+    AWS_S3_BUCKET_NAME: str
+
     JWT_SECRET: str
     JWT_ALGORITHM: str
 

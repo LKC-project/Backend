@@ -9,7 +9,7 @@ from src.infrastructure.db.mappers.base import BaseMapper
 Model = TypeVar("Model", bound=DeclarativeBase)
 
 
-class BaseRepo(Generic[Model]):
+class BaseRepo(Generic[Model]):  # TODO: Mapper generic
     model: Type[Model]
     mapper: Type[BaseMapper]
 

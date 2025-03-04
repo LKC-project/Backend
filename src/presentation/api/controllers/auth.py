@@ -41,7 +41,7 @@ async def register(
         mediator: MediatorDep,
         data: RegisterUser
 ):
-    await mediator.send(data)
+    await mediator.send(data)  # TODO: Register with not empty body
 
     return Response(status_code=status.HTTP_201_CREATED)  # Без цього повертається null а не пусте тіло, лол
 

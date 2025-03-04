@@ -6,6 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 import src.infrastructure.db.models.user  # noqa
+import src.infrastructure.db.models.project  # noqa
 
 from src.infrastructure.db.models.base import Base
 from src.config import config as project_config
