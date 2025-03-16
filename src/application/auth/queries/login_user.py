@@ -2,7 +2,7 @@ from didiator import Query, QueryHandler
 
 from src.application.auth.dto import LoginUserDTO
 from src.application.auth.interfaces import AuthReader
-from src.application.common.exceptions.auth import WrongLoginOrPassword
+from src.application.common.exceptions.auth import WrongEmailOrPassword
 
 from src.application.auth.password import Password
 
@@ -16,12 +16,15 @@ class LoginUserHandler(QueryHandler[LoginUser, int]):
         self.reader = reader
 
     async def __call__(self, command: LoginUser) -> int:
-        user = await self.reader.select_by_name(command.name)
+        user = await self.reader.select_by_email(command.email)
 
         if user is None:
-            raise WrongLoginOrPassword
+            raise WrongEmailOrPassword
+
+        if user.hashed_password is None:
+            raise WrongEmailOrPassword
 
         if not Password.valid(command.password, user.hashed_password):
-            raise WrongLoginOrPassword
+            raise WrongEmailOrPassword
 
         return user.id

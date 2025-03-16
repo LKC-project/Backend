@@ -4,7 +4,7 @@ from src.infrastructure.db.repositories.base import BaseRepo
 from src.infrastructure.db.models.user import UserORM
 from src.infrastructure.db.mappers import UserMapper
 from src.application.user.interfaces import UserReader, UserRepo
-from src.application.user.dto import UserDTO, UserWithPasswordDTO
+from src.application.user.dto import UserDTO
 from src.application.auth.dto import RegisterUserDTO
 
 
@@ -26,18 +26,6 @@ class UserReaderImpl(BaseRepo[UserORM], UserReader):
         result = await self.session.scalar(query)
 
         return None if result is None else self.mapper.from_orm(result)
-
-    async def select_with_password_by_name(self, name: str) -> UserWithPasswordDTO | None:
-        query = (
-            select(self.model)
-            .where(self.model.name.ilike(name))
-        )
-
-        result = await self.session.scalar(query)
-
-        return None if result is None else UserWithPasswordDTO.model_validate(
-            result, from_attributes=True
-        )  # TODO: Mapper
 
 
 class UserRepoImpl(BaseRepo[UserORM], UserRepo):

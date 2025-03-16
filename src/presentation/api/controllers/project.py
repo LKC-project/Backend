@@ -2,13 +2,13 @@ from typing import Annotated, Sequence
 
 from fastapi import APIRouter, Path, status
 
-from src.application.project.dto import ProjectDTO, UploadProjectDTO, UpdateProjectRequestDTO
+from src.application.project.dto import ProjectDTO, UploadProjectDTO, UpdateProjectDTO
 from src.application.project.commands.upload_project import UploadProject
 from src.application.project.commands.update_project import UpdateProject
 from src.application.project.queries.get_projects_by_user_id import GetProjectsByUserID
-from src.application.project.queries.get_project import GetProject
+from src.application.project.queries.get_project import GetProjectByID
 
-from src.presentation.api.providers.dependency import MediatorDep, CurrentUserIDDep
+from src.presentation.api.providers.dependency import MediatorDep, CurrentUserIDDep, CurrentUserDep
 from src.presentation.api.exceptions import EXCEPTION_RESPONSE_MODEL
 
 
@@ -31,15 +31,14 @@ async def get_my_projects(
 
 @projects_router.get(
     "/{id}",
-    description="Повертає посилання на проект",
-    name="‼️‼️‼️НЕ РОБИТЬ‼️‼️‼️"
+    description="Повертає об'єкт проєкту",
+    dependencies=[CurrentUserDep]
 )
 async def get_project(
         mediator: MediatorDep,
-        current_user_id: CurrentUserIDDep,
         id: Annotated[int, Path()]
-) -> Sequence[ProjectDTO]:
-    return await mediator.query(GetProject(id=id, user_id=current_user_id))
+) -> ProjectDTO | None:
+    return await mediator.query(GetProjectByID(id=id))
 
 
 @project_router.post(
@@ -70,6 +69,6 @@ async def patch_project(
         mediator: MediatorDep,
         current_user_id: CurrentUserIDDep,
         id: Annotated[int, Path()],
-        project: UpdateProjectRequestDTO
+        project: UpdateProjectDTO
 ) -> None:
     return await mediator.send(UpdateProject(id=id, user_id=current_user_id, project=project))

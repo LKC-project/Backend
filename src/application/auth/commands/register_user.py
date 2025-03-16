@@ -17,7 +17,7 @@ class RegisterUserHandler(CommandHandler[RegisterUser, None]):
 
     async def __call__(self, command: RegisterUser) -> None:
         user = InsertUserDTO(
-            name=command.name,
+            **command.model_dump(exclude={"password"}),
             hashed_password=Password.encode(command.password)
         )
 

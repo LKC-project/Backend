@@ -3,13 +3,13 @@ from fastapi import status
 from src.application.common.exceptions.base import AuthError
 
 
-class UsernameAlreadyInUse(AuthError):
+class EmailAlreadyInUse(AuthError):
     code = status.HTTP_409_CONFLICT
-    detail = "This username is already in use"
+    detail = "This email is already in use"
 
 
-class WrongLoginOrPassword(AuthError):
-    detail = "Wrong login or password"
+class WrongEmailOrPassword(AuthError):
+    detail = "Wrong email or password"
 
 
 class InvalidToken(AuthError):
@@ -18,3 +18,7 @@ class InvalidToken(AuthError):
 
 class Unauthorized(AuthError):
     pass
+
+
+class GoogleAuthorizationError(AuthError):
+    detail = "Authorization error, try again later"

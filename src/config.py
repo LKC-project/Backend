@@ -21,6 +21,9 @@ class Config(BaseSettings):
     JWT_SECRET: str
     JWT_ALGORITHM: str
 
+    GOOGLE_CLIENT_ID: str
+    GOOGLE_CLIENT_SECRET: str
+
     model_config = SettingsConfigDict(env_file=".env" if not dev else ".env-dev")
 
     @property

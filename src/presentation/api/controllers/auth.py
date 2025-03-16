@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Response, status
 
 from src.application.auth.commands.register_user import RegisterUser
+from src.application.auth.commands.google_auth import GoogleAuth
 from src.application.auth.queries.login_user import LoginUser
 
 from src.presentation.api.providers.dependency import MediatorDep
@@ -41,9 +42,26 @@ async def register(
         mediator: MediatorDep,
         data: RegisterUser
 ):
-    await mediator.send(data)  # TODO: Register with not empty body
+    await mediator.send(data)
 
     return Response(status_code=status.HTTP_201_CREATED)  # Без цього повертається null а не пусте тіло, лол
+
+
+@auth_router.post(
+    "/google",
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses={
+        status.HTTP_401_UNAUTHORIZED: EXCEPTION_RESPONSE_MODEL
+    }
+)
+async def google(
+        mediator: MediatorDep,
+        data: GoogleAuth
+):
+    user_id = await mediator.send(data)
+    response = Response(status_code=status.HTTP_204_NO_CONTENT)
+
+    return auth_provider.login(user_id=user_id, response=response)
 
 
 @auth_router.post(

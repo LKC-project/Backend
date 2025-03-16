@@ -9,5 +9,6 @@ from src.presentation.api.providers.auth import auth_provider
 
 MediatorDep = Annotated[Mediator, Depends(Stub(Mediator))]
 
+CurrentUserDep = Depends(auth_provider.current_user_id)
 CurrentUserIDDep = Annotated[int, Security(auth_provider.current_user_id)]
-CurrentUserIDOrNoneDep = Annotated[int, Security(auth_provider.current_user_id)]
+CurrentUserIDOrNoneDep = Annotated[int, Security(auth_provider.current_user_id_or_none)]

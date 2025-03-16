@@ -1,2 +1,2 @@
 $env:DEV="True"
-uvicorn src.main:app --host 127.0.0.1 --port 14088 --reload
+uvicorn src.main:app --host "localhost" --port 14088 --reload --timeout-graceful-shutdown 0

@@ -6,7 +6,7 @@ from src.infrastructure.db.models.user import UserORM
 from src.infrastructure.db.mappers import AuthMapper
 from src.application.auth.interfaces import AuthReader, AuthRepo
 from src.application.auth.dto import UserDTO, InsertUserDTO
-from src.application.common.exceptions.auth import UsernameAlreadyInUse
+from src.application.common.exceptions.auth import EmailAlreadyInUse
 
 
 class AuthReaderImpl(BaseRepo[UserORM], AuthReader):
@@ -28,6 +28,16 @@ class AuthReaderImpl(BaseRepo[UserORM], AuthReader):
 
         return None if result is None else self.mapper.from_orm(result)
 
+    async def select_by_email(self, email: str) -> UserDTO | None:
+        query = (
+            select(self.model)
+            .where(self.model.email.ilike(email))
+        )
+
+        result = await self.session.scalar(query)
+
+        return None if result is None else self.mapper.from_orm(result)
+
 
 class AuthRepoImpl(BaseRepo[UserORM], AuthRepo):
     model = UserORM
@@ -36,8 +46,8 @@ class AuthRepoImpl(BaseRepo[UserORM], AuthRepo):
     @staticmethod
     def _parse_error(err: IntegrityError):
         match getattr(err.orig.__cause__, "constraint_name"):
-            case "User_name_key":
-                raise UsernameAlreadyInUse
+            case "ix_User_email":
+                raise EmailAlreadyInUse
 
     async def insert_one(self, user: InsertUserDTO) -> UserDTO:
         stmt = (
@@ -46,11 +56,8 @@ class AuthRepoImpl(BaseRepo[UserORM], AuthRepo):
             .returning(self.model)
         )
 
-        result = None
-
         try:
             result = await self.session.scalar(stmt)
+            return self.mapper.from_orm(result)
         except IntegrityError as err:
             self._parse_error(err)
-
-        return self.mapper.from_orm(result)

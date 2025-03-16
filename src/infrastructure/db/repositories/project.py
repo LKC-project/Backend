@@ -32,7 +32,7 @@ class ProjectReaderImpl(BaseRepo[ProjectORM], ProjectReader):
 
         return [self.mapper.from_orm(project) for project in result]
 
-    async def select_all_by_id_and_user_id(self, id: int, user_id: int) -> ProjectDTO | None:
+    async def select_by_id_and_user_id(self, id: int, user_id: int) -> ProjectDTO | None:
         query = (
             select(self.model)
             .where(

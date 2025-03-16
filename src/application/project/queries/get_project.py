@@ -1,20 +1,17 @@
-from typing import Sequence
-
 from didiator import Query, QueryHandler
 
 from src.application.common.dto import DTO
-from src.application.project.dto import ProjectResponseDTO
+from src.application.project.dto import ProjectDTO
 from src.application.project.interfaces import ProjectReader
 
 
-class GetProject(DTO, Query[Sequence[ProjectResponseDTO]]):
+class GetProjectByID(DTO, Query[ProjectDTO | None]):
     id: int
-    user_id: int
 
 
-class GetProjectsByUserIDHandler(QueryHandler[GetProject, Sequence[ProjectResponseDTO]]):
+class GetProjectByIDHandler(QueryHandler[GetProjectByID, ProjectDTO | None]):
     def __init__(self, reader: ProjectReader):
         self.reader = reader
 
-    async def __call__(self, command: GetProject) -> ProjectResponseDTO:
-        project = await self.reader.select_all_by_user_id(id=command.id, user_id=command.user_id)
+    async def __call__(self, command: GetProjectByID) -> ProjectDTO | None:
+        return await self.reader.select_by_id(id=command.id)
