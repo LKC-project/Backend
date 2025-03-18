@@ -27,7 +27,7 @@ class CookieTransport(Transport):
             key=self.name,
             value=token,
             expires=self.expires,
-            samesite="lax",
+            samesite="none",
             secure=True,
         )
 
