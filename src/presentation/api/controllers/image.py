@@ -17,7 +17,7 @@ routers = (image_router, images_router)
     "",
     status_code=status.HTTP_201_CREATED,
     description="Завантаження зображення на CDN",
-    dependencies=[CurrentUserDep]
+    # dependencies=[CurrentUserDep]  # TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 )
 async def post_image(
         mediator: MediatorDep,
