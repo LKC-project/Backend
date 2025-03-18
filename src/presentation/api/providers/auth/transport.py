@@ -29,6 +29,7 @@ class CookieTransport(Transport):
             expires=self.expires,
             samesite="lax",
             secure=True,
+            domain="gridium.xyz"
         )
 
         return response
