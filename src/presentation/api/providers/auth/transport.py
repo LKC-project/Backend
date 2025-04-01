@@ -37,10 +37,17 @@ class CookieTransport(Transport):
         return request.cookies.get(self.name)
 
     def delete(self, response: Response = Response()) -> Response:
-        response.set_cookie(
+        response.delete_cookie(
             key=self.name,
-            value="",
-            expires=0,
+            samesite="none",
+            # secure=True,
         )
+        # response.set_cookie(
+        #     key=self.name,
+        #     value="",
+        #     expires=0,
+        #     samesite="none",
+        #     # secure=True,
+        # )
 
         return response
