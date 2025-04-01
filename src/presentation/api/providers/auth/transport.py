@@ -28,7 +28,7 @@ class CookieTransport(Transport):
             value=token,
             expires=self.expires,
             samesite="none",
-            # secure=True,
+            secure=True,
         )
 
         return response
@@ -40,14 +40,7 @@ class CookieTransport(Transport):
         response.delete_cookie(
             key=self.name,
             samesite="none",
-            # secure=True,
+            secure=True,
         )
-        # response.set_cookie(
-        #     key=self.name,
-        #     value="",
-        #     expires=0,
-        #     samesite="none",
-        #     # secure=True,
-        # )
 
         return response
