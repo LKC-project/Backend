@@ -29,7 +29,7 @@ async def get_my_projects(
     return await mediator.query(GetProjectsByUserID(user_id=current_user_id))
 
 
-@projects_router.get(
+@project_router.get(
     "/{id}",
     description="Повертає об'єкт проєкту",
     dependencies=[CurrentUserDep]
