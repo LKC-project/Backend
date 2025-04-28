@@ -27,6 +27,7 @@ dependencies = [
     "google-auth (>=2.38.0,<3.0.0)",
     "requests (>=2.32.3,<3.0.0)",
     "watchfiles (>=1.0.4,<2.0.0)",
+    "openai (>=1.75.0,<2.0.0)",
 ]
 
 

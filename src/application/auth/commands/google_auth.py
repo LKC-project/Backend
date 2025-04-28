@@ -50,6 +50,7 @@ class GoogleAuthHandler(CommandHandler[GoogleAuth, int]):
 
         try:
             user_data: GoogleAuthTokenData = await run_sync(func)
+            print(user_data)
         except GoogleAuthError:
             raise GoogleAuthorizationError
 

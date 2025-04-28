@@ -24,6 +24,8 @@ class Config(BaseSettings):
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
 
+    OPEN_AI_TOKEN: str
+
     model_config = SettingsConfigDict(env_file=".env" if not dev else ".env-dev")
 
     @property

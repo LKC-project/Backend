@@ -24,6 +24,7 @@ from src.infrastructure.db.repositories.auth import AuthReaderImpl, AuthRepoImpl
 from src.application.project.interfaces import ProjectReader, ProjectRepo
 from src.infrastructure.db.repositories.project import ProjectReaderImpl, ProjectRepoImpl
 from src.infrastructure.s3 import ObjectStorage, ObjectStorageImpl, S3ClientConfig, get_s3_client, setup_s3_config
+from src.infrastructure.openai import OpenAIClient, OpenAIClientConfig, get_openai_client, setup_openai_config
 
 
 def init_di_builder() -> DiBuilder:
@@ -46,6 +47,7 @@ def setup_di_builder(di_builder: DiBuilder) -> None:
     setup_mediator_factories(di_builder, get_mediator, DiScope.REQUEST)
     setup_db_factories(di_builder)
     setup_s3_factory(di_builder)
+    setup_clients(di_builder)
 
 
 def setup_mediator_factories(
@@ -61,6 +63,7 @@ def setup_mediator_factories(
 def setup_config_factories(di_builder: DiBuilder, config: Config):
     di_builder.bind(bind_by_type(Dependent(lambda: config, scope=DiScope.APP), Config))
     di_builder.bind(bind_by_type(Dependent(setup_s3_config, scope=DiScope.APP), S3ClientConfig))
+    di_builder.bind(bind_by_type(Dependent(setup_openai_config, scope=DiScope.APP), OpenAIClientConfig))
 
 
 def setup_db_factories(di_builder: DiBuilder):
@@ -86,3 +89,7 @@ def setup_db_factories(di_builder: DiBuilder):
 def setup_s3_factory(di_builder: DiBuilder):
     di_builder.bind(bind_by_type(Dependent(get_s3_client, scope=DiScope.REQUEST), AioBaseClient, covariant=True))
     di_builder.bind(bind_by_type(Dependent(ObjectStorageImpl, scope=DiScope.REQUEST), ObjectStorage, covariant=True))
+
+
+def setup_clients(di_builder: DiBuilder):
+    di_builder.bind(bind_by_type(Dependent(get_openai_client, scope=DiScope.REQUEST), OpenAIClient))
