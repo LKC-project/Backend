@@ -1,2 +1,2 @@
 export DEV=True
-uvicorn src.main:app --host 127.0.0.1 --port 14088 --reload
+uvicorn src.main:app --host 127.0.0.1 --port 14088 --reload --ssl-keyfile=localhost-key.pem --ssl-certfile=localhost.pem

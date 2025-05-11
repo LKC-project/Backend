@@ -4,6 +4,7 @@ from fastapi import APIRouter, UploadFile, File, status
 
 from src.presentation.api.providers.dependency import MediatorDep, CurrentUserDep
 from src.application.image.commands.upload_image import UploadImage
+from src.application.image.commands.upload_image_from_google_drive import UploadImageFromGoogleDrive
 from src.application.image.dto import ImageDTO
 
 
@@ -17,7 +18,7 @@ routers = (image_router, images_router)
     "",
     status_code=status.HTTP_201_CREATED,
     description="Завантаження зображення на CDN",
-    # dependencies=[CurrentUserDep]  # TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    dependencies=[CurrentUserDep]
 )
 async def post_image(
         mediator: MediatorDep,
@@ -26,3 +27,16 @@ async def post_image(
     img = await file.read()
 
     return await mediator.send(UploadImage(content=img))
+
+
+@image_router.post(
+    "/google-drive",
+    status_code=status.HTTP_201_CREATED,
+    description="Завантаження ...",
+    dependencies=[CurrentUserDep]
+)
+async def post_image(
+        mediator: MediatorDep,
+        data: UploadImageFromGoogleDrive
+) -> ImageDTO:
+    return await mediator.send(data)

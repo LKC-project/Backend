@@ -10,3 +10,8 @@ class ImageDTO(DTO):
 class UploadImageDTO(DTO):
     name: str | None = Field(None, max_length=255)
     content: bytes
+
+
+class UploadImageFromGoogleDriveDTO(DTO):
+    file_id: str = Field(None, max_length=255)
+    access_token: str

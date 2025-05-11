@@ -45,14 +45,13 @@ class GoogleAuthHandler(CommandHandler[GoogleAuth, int]):
             id_token.verify_token,
             id_token=command.credential,
             request=requests.Request(),
-            clock_skew_in_seconds=5
+            clock_skew_in_seconds=60
         )
 
         try:
             user_data: GoogleAuthTokenData = await run_sync(func)
-            print(user_data)
-        except GoogleAuthError:
-            raise GoogleAuthorizationError
+        except GoogleAuthError as e:
+            raise GoogleAuthorizationError from e
 
         user = await self.reader.select_by_email(user_data["email"])
 

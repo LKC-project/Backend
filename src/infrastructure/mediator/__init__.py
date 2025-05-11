@@ -8,6 +8,7 @@ from src.infrastructure.mediator.handlers.auth import setup_auth_handlers
 from src.infrastructure.mediator.handlers.image import setup_image_handlers
 from src.infrastructure.mediator.handlers.project import setup_project_handlers
 from src.infrastructure.mediator.handlers.chat import setup_chat_handlers
+from src.infrastructure.mediator.handlers.google_drive import setup_google_drive_handlers
 
 
 def get_mediator() -> Mediator:
@@ -34,3 +35,4 @@ def setup_mediator(mediator: Mediator):
     setup_image_handlers(mediator)
     setup_project_handlers(mediator)
     setup_chat_handlers(mediator)
+    setup_google_drive_handlers(mediator)
