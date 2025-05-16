@@ -1,1 +1,1 @@
-gunicorn src.main:app --bind 127.0.0.1:8814
+gunicorn src.main:app --bind 127.0.0.1:8814 -k uvicorn.workers.UvicornWorker
