@@ -21,4 +21,4 @@
 
 ## Опублікований продукт
 
-Сервіс доступний за посиланням [api.lkc.xyz](http://about:blank).
+Сервіс доступний за посиланням [api.lkc-board.xyz](https://api.lkc-board.xyz/docs).
