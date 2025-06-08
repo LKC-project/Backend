@@ -29,6 +29,8 @@ dependencies = [
     "watchfiles (>=1.0.4,<2.0.0)",
     "openai (>=1.75.0,<2.0.0)",
     "gunicorn (>=23.0.0,<24.0.0)",
+    "pytest (>=8.3.5,<9.0.0)",
+    "pytest-asyncio (>=0.26.0,<0.27.0)",
 ]
 
 

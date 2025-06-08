@@ -1,1 +1,1 @@
-$env:DEV="True"
+$env:ENV="DEV"

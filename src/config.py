@@ -3,7 +3,14 @@ from os import getenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-dev = str(getenv("DEV")).lower() == "true"
+env = str(getenv("ENV")).lower()
+env_file = ".env"
+
+
+if env == "dev":
+    env_file = ".env-dev"
+elif env == "test":
+    env_file = ".env-test"
 
 
 class Config(BaseSettings):
@@ -26,7 +33,7 @@ class Config(BaseSettings):
 
     OPEN_AI_TOKEN: str
 
-    model_config = SettingsConfigDict(env_file=".env" if not dev else ".env-dev")
+    model_config = SettingsConfigDict(env_file=env_file)
 
     @property
     def db_url(self):
